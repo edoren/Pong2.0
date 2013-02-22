@@ -12,6 +12,15 @@ object = {} -- Table to hold all the physical objects
 pongWidth = 70
 pongHeight = 13
 
+function ballDirection()
+    random = math.random(0,1)
+    if random == 0 then
+        return -1
+    elseif random == 1 then
+        return 1
+    end
+end
+
 function loadObjects(world, screenWidth, screenHeight)
     -- Pong
     object.pong = {}
@@ -30,7 +39,7 @@ function loadObjects(world, screenWidth, screenHeight)
             object.ball.fixture:setUserData("Ball")
      
     -- Ball initial movement
-    object.ball.body:setLinearVelocity(160, 160)
+    object.ball.body:setLinearVelocity(ballDirection()*160, ballDirection()*160)
 end
 
 ------------------------------------------------------------------------
@@ -38,9 +47,11 @@ end
 ------------------------------------------------------------------------
 
 function drawObjects()
+    -- Draw Pong
     love.graphics.setColor(255, 255, 255) -- set the drawing color to white for the pong
     love.graphics.rectangle("fill", object.pong.body:getX()-pongWidth/2, object.pong.body:getY()-pongHeight/2, pongWidth, pongHeight)
 
+    -- Draw Ball
     love.graphics.setColor(193, 47, 14) --set the drawing color to red for the ball
     love.graphics.circle("fill", object.ball.body:getX(), object.ball.body:getY(), object.ball.shape:getRadius())
 end
@@ -50,15 +61,14 @@ end
 ------------------------------------------------------------------------
 
 function updateObjects(screenWidth, screenHeight)
-     object.pong.body:setPosition(object.pong.body:getX() , screenHeight-25)
-
+    -- Keys to move the pong
     if love.keyboard.isDown("right") then
         object.pong.body:setX(object.pong.body:getX()+5)
     elseif love.keyboard.isDown("left") then
         object.pong.body:setX(object.pong.body:getX()-5)
     end
 
-    -- increses de Ball Linear Velocity
+    -- Increses de Ball Linear Velocity
     vx, vy = object.ball.body:getLinearVelocity()
     if vx < 0 then
         increseX = -0.04
@@ -72,6 +82,7 @@ function updateObjects(screenWidth, screenHeight)
     end
     object.ball.body:setLinearVelocity(vx+increseX, vy+increseY)
 
+    -- Set the pong movement limits
     if object.pong.body:getX() < pongWidth/2+1 then
         object.pong.body:setPosition(pongWidth/2+1 , screenHeight-25)
     elseif object.pong.body:getX() > screenWidth-pongWidth/2+1 then

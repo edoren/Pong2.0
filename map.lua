@@ -35,6 +35,7 @@ end
 ------------------------------------------------------------------------
 
 function drawMap()
+    -- Draw the Walls
     love.graphics.setColor(255, 255, 255) -- set the drawing color to white for the walls
     love.graphics.polygon("fill", map.wallR.body:getWorldPoints(map.wallR.shape:getPoints()))
     love.graphics.polygon("fill", map.wallL.body:getWorldPoints(map.wallL.shape:getPoints()))
